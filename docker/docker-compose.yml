@@ -1,0 +1,60 @@
+version: '3.1'
+services:
+  mydb:
+    build: 
+      context: .
+      dockerfile: mysql.Dockerfile  
+    volumes:
+       - mysql_data:/var/lib/mysql  
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 123  
+    networks:
+      - containernetwork  
+  jenkins:
+    build:
+      context: .
+      dockerfile: jenkins.Dockerfile 
+    ports:
+      - "8080:8080" 
+    volumes:
+      - jenkins-data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+  db_postgres:
+    image: postgres
+    networks:
+      - networksonar
+    environment:
+      - POSTGRES_USER=sonar
+      - POSTGRES_PASSWORD=sonar
+    volumes:
+      - postgresql:/var/lib/postgresql      
+      - postgresql_data:/var/lib/postgresql/data
+  sonarqube:
+    build: 
+      context: .
+      dockerfile: sonar.Dockerfile  
+    ports:
+      - "9000:9000"
+    networks:
+      - networksonar
+    environment:
+      - SONARQUBE_JDBC_URL=jdbc:postgresql://db_postgres:5432/sonar
+    volumes:
+      - sonarqube_conf:/opt/sonarqube/conf
+      - sonarqube_data:/opt/sonarqube/data
+networks:
+  containernetwork:
+    driver: bridge
+  networksonar:
+    driver: bridge    
+volumes:
+  mysql_data:    
+  volumes:
+  sonarqube_conf:
+  sonarqube_data:
+  postgresql:
+  postgresql_data:
+  jenkins-data:
