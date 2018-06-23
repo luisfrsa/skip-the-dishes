@@ -8,10 +8,10 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
-@Entity(name = "courier")
-@Table(name = "courier")
+@Entity(name = "restaurant")
+@Table(name = "restaurant")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-public class Courier implements Serializable {
+public class Restaurant implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -19,19 +19,23 @@ public class Courier implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-
     @NotNull
     private String name;
+    @NotNull
+    private String address;
 
-    @OneToMany(mappedBy = "courier", targetEntity = Order.class, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "restaurant", targetEntity = Order.class, cascade = CascadeType.ALL)
     @JsonBackReference
     private List<Order> orders;
+
+    public Restaurant() {
+    }
 
     public Long getId() {
         return id;
     }
 
-    public Courier setId(Long id) {
+    public Restaurant setId(Long id) {
         this.id = id;
         return this;
     }
@@ -40,8 +44,17 @@ public class Courier implements Serializable {
         return name;
     }
 
-    public Courier setName(String name) {
+    public Restaurant setName(String name) {
         this.name = name;
+        return this;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public Restaurant setAddress(String address) {
+        this.address = address;
         return this;
     }
 
@@ -49,16 +62,17 @@ public class Courier implements Serializable {
         return orders;
     }
 
-    public Courier setOrders(List<Order> orders) {
+    public Restaurant setOrders(List<Order> orders) {
         this.orders = orders;
         return this;
     }
 
     @Override
     public String toString() {
-        return "Courier{" +
+        return "Restaurant{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
                 ", orders=" + orders +
                 '}';
     }

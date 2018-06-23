@@ -1,10 +1,10 @@
-package com.luisskipthedishes.restaurant.service;
+package com.luisskipthedishes.order.service;
 
-import com.luisskipthedishes.restaurant.exception.ApplicationServiceException;
-import com.luisskipthedishes.restaurant.model.Restaurant;
-import com.luisskipthedishes.restaurant.repository.RestaurantRepository;
-import com.luisskipthedishes.restaurant.service.dto.RestaurantDTO;
-import com.luisskipthedishes.restaurant.service.mapper.RestaurantMapper;
+import com.luisskipthedishes.order.exception.ApplicationServiceException;
+import com.luisskipthedishes.order.model.Restaurant;
+import com.luisskipthedishes.order.repository.RestaurantRepository;
+import com.luisskipthedishes.order.service.dto.RestaurantDTO;
+import com.luisskipthedishes.order.service.mapper.RestaurantMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -38,18 +37,30 @@ public class RestaurantService {
 
 
     public RestaurantDTO findOne(Long id) {
-        Restaurant restaurant = restaurantRepository.getOne(id);
+        Restaurant restaurant = findOneEntity(id);
         return restaurantMapper.toDto(restaurant);
     }
 
+    @Transactional(readOnly = true)
+    public Restaurant findOneEntity(Long id) {
+        return restaurantRepository.getOne(id);
+    }
+
     public List<RestaurantDTO> findAll() {
-        return restaurantRepository.findAll()
+        return findAllEntity()
                 .stream()
                 .map(restaurantMapper::toDto)
-                .collect(Collectors.toCollection(LinkedList::new));
+                .collect(Collectors.toList());
 
     }
 
+    @Transactional(readOnly = true)
+    public List<Restaurant> findAllEntity() {
+        return restaurantRepository.findAll();
+
+    }
+
+    @Transactional
     public RestaurantDTO persist(RestaurantDTO restaurantDTO) {
         if (Objects.isNull(restaurantDTO)) {
             throw new ApplicationServiceException(PERSIST_REQUESTED_WITH_NULL_OBJECT, HttpStatus.PRECONDITION_FAILED);
@@ -75,6 +86,7 @@ public class RestaurantService {
         return restaurantMapper.toDto(restaurantRepository.save(restaurant));
     }
 
+    @Transactional
     public void delete(Long id) {
         Restaurant restaurant = restaurantRepository.getOne(id);
         if (Objects.isNull(restaurant)) {
@@ -84,7 +96,6 @@ public class RestaurantService {
     }
 
     public void delete(RestaurantDTO restaurantDTO) {
-
         restaurantRepository.deleteById(restaurantDTO.getId());
     }
 

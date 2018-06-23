@@ -2,7 +2,6 @@ package com.luisskipthedishes.order.resource;
 
 
 import com.luisskipthedishes.order.exception.ApplicationResourceException;
-import com.luisskipthedishes.order.resource.util.HeaderUtil;
 import com.luisskipthedishes.order.resource.util.ResponseUtil;
 import com.luisskipthedishes.order.service.OrderService;
 import com.luisskipthedishes.order.service.dto.OrderDTO;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
@@ -75,12 +73,12 @@ public class OrderResource {
     }
 
 
-//    @PostMapping("/order")
-//    public ResponseEntity<OrderDTO> createNewOrder(@PathVariable Long idUser, @PathVariable Long idRestaurant, @PathVariable BigDecimal value) {
-//        String strLog = format(NEW_ORDER, idUser, idRestaurant, value);
-//        log.info(strLog);
-//        OrderDTO result = orderService.createNewOrder(idUser, idRestaurant, value);
-//        return ResponseEntity.ok().body(result);
-//    }
+    @PostMapping("/order/{idUser}/{idRestaurant}/{value}")
+    public ResponseEntity<OrderDTO> createNewOrder(@PathVariable Long idUser, @PathVariable Long idRestaurant, @PathVariable BigDecimal value) {
+        String strLog = format(NEW_ORDER, idUser, idRestaurant, value);
+        log.info(strLog);
+        OrderDTO result = orderService.createNewOrder(idUser, idRestaurant, value);
+        return ResponseEntity.ok().body(result);
+    }
 
 }

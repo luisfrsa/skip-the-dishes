@@ -1,28 +1,34 @@
 package com.luisskipthedishes.order.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.LinkedList;
+import java.util.List;
 
 @Entity(name = "user")
 @Table(name = "user")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @NotNull
+
     private String name;
 
     @NotNull
     private String address;
 
-    @Transient
-    private LinkedList<Order> orders;
+    @OneToMany(mappedBy = "user", targetEntity = Order.class, cascade = CascadeType.ALL)
+    @JsonBackReference
+    private List<Order> orders;
 
     public User() {
 
@@ -59,12 +65,22 @@ public class User implements Serializable {
         return this;
     }
 
-    public LinkedList<Order> getOrders() {
+    public List<Order> getOrders() {
         return orders;
     }
 
-    public User setOrders(LinkedList<Order> orders) {
+    public User setOrders(List<Order> orders) {
         this.orders = orders;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", orders=" + orders +
+                '}';
     }
 }

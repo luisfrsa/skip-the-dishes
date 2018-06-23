@@ -1,1 +1,0 @@
-FROM  jenkinsci/blueocean

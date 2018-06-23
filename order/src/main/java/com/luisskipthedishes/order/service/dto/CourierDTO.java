@@ -4,18 +4,17 @@ import com.luisskipthedishes.order.model.Order;
 
 import java.util.List;
 
-public class UserDTO {
+public class CourierDTO {
 
     private Long id;
     private String name;
-    private String address;
     private List<Order> orders;
 
     public Long getId() {
         return id;
     }
 
-    public UserDTO setId(Long id) {
+    public CourierDTO setId(Long id) {
         this.id = id;
         return this;
     }
@@ -24,17 +23,8 @@ public class UserDTO {
         return name;
     }
 
-    public UserDTO setName(String name) {
+    public CourierDTO setName(String name) {
         this.name = name;
-        return this;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public UserDTO setAddress(String address) {
-        this.address = address;
         return this;
     }
 
@@ -42,9 +32,8 @@ public class UserDTO {
         return orders;
     }
 
-    public UserDTO setOrders(List<Order> orders) {
+    public CourierDTO setOrders(List<Order> orders) {
         this.orders = orders;
         return this;
     }
-
 }

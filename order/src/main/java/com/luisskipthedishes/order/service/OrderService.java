@@ -2,6 +2,8 @@ package com.luisskipthedishes.order.service;
 
 import com.luisskipthedishes.order.exception.ApplicationServiceException;
 import com.luisskipthedishes.order.model.Order;
+import com.luisskipthedishes.order.model.Restaurant;
+import com.luisskipthedishes.order.model.User;
 import com.luisskipthedishes.order.repository.OrderRepository;
 import com.luisskipthedishes.order.service.dto.OrderDTO;
 import com.luisskipthedishes.order.service.mapper.OrderMapper;
@@ -12,9 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.LinkedList;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
@@ -38,6 +41,9 @@ public class OrderService {
     private OrderRepository orderRepository;
 
     @Autowired
+    private RestaurantService restaurantService;
+
+    @Autowired
     private UserService userService;
 
     public OrderDTO findOne(Long id) {
@@ -54,7 +60,7 @@ public class OrderService {
         return findAllEntity()
                 .stream()
                 .map(orderMapper::toDto)
-                .collect(Collectors.toCollection(LinkedList::new));
+                .collect(Collectors.toList());
 
     }
 
@@ -103,18 +109,21 @@ public class OrderService {
         orderRepository.deleteById(orderDTO.getId());
     }
 
-//    public OrderDTO createNewOrder(Long idUser, Long idRestaurant, BigDecimal value) {
-//
-//        Restaurant restaurant = restaurantServiceProxy.getRestaurant(idRestaurant);
-//        User user = userService.findOneEntity(idUser);
-//
-//        System.out.println("Restaurant " + restaurant.getName());
-//
-//        Order order = new Order()
-//                .setRestaurant(restaurant)
-//                .setUser(user)
-//                .setValue(value);
-//        return orderMapper.toDto(orderRepository.save(order));
-//    }
+    public OrderDTO createNewOrder(Long idUser, Long idRestaurant, BigDecimal value) {
+        Restaurant restaurant = restaurantService.findOneEntity(idRestaurant);
+        User user = userService.findOneEntity(idUser);
+
+        Order order = new Order()
+                .setRestaurant(restaurant)
+                .setUser(user)
+                .setValue(value);
+
+        Order newOrdrder =orderRepository.save(order);
+        return orderMapper.toDto(newOrdrder);
+    }
+
+    public Optional<Order> getUndeliveriedOrder(){
+        return orderRepository.findFirstByFinishedFalse();
+    }
 
 }

@@ -1,17 +1,21 @@
 package com.luisskipthedishes.order.service.dto;
 
+import com.luisskipthedishes.order.model.Courier;
+import com.luisskipthedishes.order.model.Restaurant;
 import com.luisskipthedishes.order.model.User;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 public class OrderDTO {
 
     private Long id;
-    private User user;
+
     private BigDecimal value;
-    private Date createdAt;
-    private Date updatedAt;
+    private Restaurant restaurant;
+    private User user;
+    private Courier courier;
+
+    private boolean finished;
 
     public Long getId() {
         return id;
@@ -31,6 +35,14 @@ public class OrderDTO {
         return this;
     }
 
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public OrderDTO setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+        return this;
+    }
 
     public BigDecimal getValue() {
         return value;
@@ -41,21 +53,21 @@ public class OrderDTO {
         return this;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
+    public Courier getCourier() {
+        return courier;
     }
 
-    public OrderDTO setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    public OrderDTO setCourier(Courier courier) {
+        this.courier = courier;
         return this;
     }
 
-    public Date getUpdatedAt() {
-        return updatedAt;
+    public boolean isFinished() {
+        return finished;
     }
 
-    public OrderDTO setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
+    public OrderDTO setFinished(boolean finished) {
+        this.finished = finished;
         return this;
     }
 }

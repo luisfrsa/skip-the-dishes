@@ -13,15 +13,6 @@ services:
       MYSQL_ROOT_PASSWORD: 123  
     networks:
       - containernetwork  
-  jenkins:
-    build:
-      context: .
-      dockerfile: jenkins.Dockerfile 
-    ports:
-      - "8080:8080" 
-    volumes:
-      - jenkins-data:/var/jenkins_home
-      - /var/run/docker.sock:/var/run/docker.sock
   db_postgres:
     image: postgres
     networks:
@@ -57,4 +48,3 @@ volumes:
   sonarqube_data:
   postgresql:
   postgresql_data:
-  jenkins-data:
